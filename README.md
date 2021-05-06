@@ -1,4 +1,4 @@
-<p align="center"><img src="images/" width="200"></p>
+<p align="center"><img src="Assets/icon.png" width="200"></p>
 
 <p align="center">
     <img src="https://img.shields.io/badge/iOS-14.0+-blue.svg" />
@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/SwiftUI-2.0-red.svg" />
 </p>
 
-# 🇨🇿 CZ Covid19 Statistics
+# 🇨🇿 COVID-19 Statistics
 
 ### Screenshots
 <img src="Assets/showcase.gif" width="300"/> <img src="Assets/screenshot1.png" width="300"/> <img src="Assets/screenshot2.png" width="300"/>
@@ -21,5 +21,4 @@
 [https://apify.com/petrpatek/covid-cz](https://apify.com/petrpatek/covid-cz)
 
 ### Note
-> I have build this app to be published to the App Store. (Unfortunately they have speacial requirements for coronavirus apps, which I don't fullfil)
-> 
+> I have build this app to be published to the App Store. (Unfortunately they have special requirements for COVID-19 related apps, that I don't meet)
