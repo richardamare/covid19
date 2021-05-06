@@ -9,7 +9,8 @@
 # 🇨🇿 CZ Covid19 Statistics
 
 ### Screenshots
-<img src="Assets/showcase.gif" width="300"/>
+<img src="Assets/showcase.gif" width="300"/> <img src="Assets/screenshot1.png" width="300"/> <img src="Assets/screenshot2.png" width="300"/>
+
 
 ### Features
 - Change chart timeline (1 week, 1 month, ...)
