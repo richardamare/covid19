@@ -97,7 +97,14 @@ struct ContentView: View {
                     Label("source \("onemocneni-aktualne.mzcr.cz")", systemImage: "link.circle")
                         .font(.caption)
                 }
+                
+                Link(destination: URL(string: "https://erouska.cz")!) {
+                    Label("contact", systemImage: "figure.stand.line.dotted.figure.stand")
+                        .font(.caption)
+
+                }
             }
+            
         }
         .accentColor(.blue)
         .onAppear(perform: viewModel.fetchAllData)
