@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  CovidCzech
+
+  Created by Richard Amare on 06.05.2021.
+  
+*/
+
+"deceased" = "Úmrtí";
+"infected" = "Nakažení";
+"recovered" = "Uzdravení";
+"hospitalized" = "Hospitalizováni";
+"critical" = "Kritické případy";
+"Czech Republic" = "Česká Republika";
+"region" = "Kraj";
+"cases" = "Případy";
+"more" = "Zobrazit více";
+"less" = "Zobrazit méně";
+"source %@" = "Zdroj: %@";
+"antigen" = "Antigenní testy";
+"pcr" = "PCR testy";
+"totalTested" = "Celkem testováno";
+"lastUpdate %@" = "Poslední aktualizace %@.";
+"lastChecked %@" = "Zkontrolováno %@.";
+"1W" = "1T";
+"all" = "VŠE";

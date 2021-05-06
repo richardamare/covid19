@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListRowView: View {
-    var key: String
+    var key: LocalizedStringKey
     var value: Int
     
     var body: some View {

@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-enum GraphRange: String, CaseIterable {
+enum GraphRange: LocalizedStringKey, CaseIterable {
     case week = "1W"
     case month = "1M"
     case threeMonths = "3M"
     case sixMonths = "6M"
-    case all = "ALL"
+    case all = "all"
 }
 
 let regionNames = ["Hlavní město Praha", "Středočeský kraj", "Jihočeský kraj", "Plzeňský kraj", "Karlovarský kraj", "Ústecký kraj", "Liberecký kraj", "Královéhradecký kraj", "Pardubický kraj", "Kraj Vysočina", "Jihomoravský kraj", "Olomoucký kraj", "Zlínský kraj", "Moravskoslezský kraj"]
