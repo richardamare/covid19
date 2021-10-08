@@ -50,9 +50,9 @@ struct ContentView: View {
                 InfoRow("Recovered", value: viewModel.recoveredByRegion.value)
                 InfoRow("Deceased", value: viewModel.deceasedByRegion.value)
             } header: {
-                Picker(selection: $viewModel.selectedRegion, label: Text(viewModel.selectedRegion.name)) {
+                Picker(selection: $viewModel.pickedRegion, label: Text(viewModel.pickedRegion)) {
                     ForEach(viewModel.regionNames, id: \.self) { item in
-                        Text(item).textCase(nil).tag(viewModel.assignRegion(for: item))
+                        Text(item).textCase(nil).tag(item)
                     }
                 }
                 .pickerStyle(.menu)

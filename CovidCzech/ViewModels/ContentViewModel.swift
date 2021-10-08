@@ -8,8 +8,7 @@
 import SwiftUI
 
 class ContentViewModel: ObservableObject {
-    @Published var selectedRegion: Region = .dummy
-    @Published var regions: [Region] = []
+    @Published var pickedRegion: String = "Hlavní město Praha"
     @Published var selectedChartPreview: ChartPreview = .week
     @Published var countryData: Country = .dummy
     
@@ -27,20 +26,20 @@ class ContentViewModel: ObservableObject {
         lastChecked.formatted(.relative(presentation: .named))
     }
     
-    func assignRegion(for string: String) -> Region {
+    func assignRegion(for string: String, in regions: [Region]) -> Region {
         regions.first(where: { $0.name == string }) ?? .dummy
     }
     
     var deceasedByRegion: Region {
-        countryData.deceasedByRegion.first(where: { $0.name == selectedRegion.name }) ?? .dummy
+        assignRegion(for: pickedRegion, in: countryData.deceasedByRegion)
     }
     
     var infectedByRegion: Region {
-        countryData.infectedByRegion.first(where: { $0.name == selectedRegion.name }) ?? .dummy
+        assignRegion(for: pickedRegion, in: countryData.infectedByRegion)
     }
     
     var recoveredByRegion: Region {
-        countryData.recoveredByRegion.first(where: { $0.name == selectedRegion.name }) ?? .dummy
+        assignRegion(for: pickedRegion, in: countryData.recoveredByRegion)
     }
     
     var regionNames: [String] {
