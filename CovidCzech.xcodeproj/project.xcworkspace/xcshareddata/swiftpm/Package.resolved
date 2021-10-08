@@ -2,30 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "Charts",
-        "repositoryURL": "https://github.com/swift-extensions/swiftui-charts.git",
+        "package": "SwiftUICharts",
+        "repositoryURL": "https://github.com/willdale/SwiftUICharts.git",
         "state": {
-          "branch": null,
-          "revision": "0b66e5c2326e954efdcc94a9eeb699e2f2ae80a2",
-          "version": "1.0.0"
-        }
-      },
-      {
-        "package": "Shapes",
-        "repositoryURL": "https://github.com/swift-extensions/swiftui-shapes.git",
-        "state": {
-          "branch": null,
-          "revision": "c58b15c37eae9bd20525c6daa93a06a689ca75cb",
-          "version": "1.1.0"
-        }
-      },
-      {
-        "package": "SwiftyJSON",
-        "repositoryURL": "https://github.com/SwiftyJSON/SwiftyJSON.git",
-        "state": {
-          "branch": null,
-          "revision": "b3dcd7dbd0d488e1a7077cb33b00f2083e382f07",
-          "version": "5.0.1"
+          "branch": "main",
+          "revision": "0ba0862890dddc06bd7282f49d2e6679e7bacc24",
+          "version": null
         }
       }
     ]

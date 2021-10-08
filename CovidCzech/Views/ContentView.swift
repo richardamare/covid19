@@ -2,133 +2,82 @@
 //  ContentView.swift
 //  CovidCzech
 //
-//  Created by Richard Amare on 05.05.2021.
+//  Created by Richard Amare on 10/4/21.
 //
 
 import SwiftUI
-import Charts
 
 struct ContentView: View {
-    
     @StateObject private var viewModel = ContentViewModel()
     
     var body: some View {
-        Form {
+        List {
             Section {
-                Button(action: viewModel.fetchAllData) {
-                    VStack (alignment: .leading, spacing: 15) {
-                        Text("lastUpdate \(viewModel.timeAgo(for: viewModel.lastUpdated))")
-                        Text("lastChecked \(viewModel.timeAgo(for: viewModel.lastChecked))")
-                            .font(.footnote)
-                            .fontWeight(.medium)
-                            .foregroundColor(.gray)
-                    }
-                    .padding(.vertical, 10)
-                    .foregroundColor(.primary)
+                VStack(alignment: .leading, spacing: 2.5) {
+                    Text("Last update was \(viewModel.updated).")
+                        .fontWeight(.medium)
+                        .foregroundColor(.primary)
+                    Text("Checked \(viewModel.checked).")
+                        .font(.footnote)
+                        .foregroundColor(.gray)
                 }
-            }
-            
-            Section(header: Text("cases")) {
-                Chart(data: viewModel.graphData)
-                    .chartStyle(LineChartStyle(.quadCurve, lineColor: .accentColor, lineWidth: 2.5))
-                    .frame(height: UIScreen.main.bounds.height * 0.225)
-                    .padding(.top, 15)
-                    .padding(.bottom, 5)
-                
-                Picker(selection: $viewModel.timeRange, label: Text("Time Range")) {
-                    ForEach(GraphRange.allCases, id: \.self) { range in
-                        Text(range.rawValue)
-                    }
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(.bottom, 10)
-                .padding(.top, 5)
-            }
-            
-            Section(header: countryHeader) {
-                ListRowView(key: "infected", value: viewModel.country.infected)
-                ListRowView(key: "recovered", value: viewModel.country.recovered)
-                ListRowView(key: "hospitalized", value: viewModel.country.hospitalized)
-                ListRowView(key: "critical", value: viewModel.country.critical)
-                ListRowView(key: "deceased", value: viewModel.country.deceased)
-                
-                if viewModel.showMore {
-                    ListRowView(key: "antigen", value: viewModel.country.antigen)
-                    ListRowView(key: "pcr", value: viewModel.country.pcr)
-                    ListRowView(key: "totalTested", value: viewModel.country.totalTested)
-                }
-            }
-            
-            Section(header: Text("region")) {
-                Menu {
-                    ForEach(regionNames, id: \.self) { region in
-                        Button(action: {
-                            viewModel.changeRegion(region: region)
-                        }) {
-                            HStack {
-                                Text(region)
-                                Spacer()
-                                if viewModel.currentRegion == region {
-                                    Image(systemName: "checkmark")
-                                }
-                            }
-                        }
-                    }
-                } label: {
-                    HStack {
-                        Text(viewModel.currentRegion)
-                            .foregroundColor(.primary)
-                        Spacer()
-                        Image(systemName: "chevron.down")
-                            .font(Font.title3.weight(.semibold))
-                    }
-                    .padding(.vertical)
-                }
-            }
-            
-            Section(header: Text(viewModel.currentRegion)) {
-                ListRowView(key: "infected", value: viewModel.currentRegionData.infected)
-                ListRowView(key: "recovered", value: viewModel.currentRegionData.recovered)
-                ListRowView(key: "deceased", value: viewModel.currentRegionData.deceased)
+                .padding(.vertical, 8)
             }
             
             Section {
-                Link(destination: URL(string: "https://onemocneni-aktualne.mzcr.cz/covid-19")!) {
-                    Label("source \("onemocneni-aktualne.mzcr.cz")", systemImage: "link.circle")
-                        .font(.caption)
-                }
+                LineChartView(data: viewModel.chartData)
                 
-                Link(destination: URL(string: "https://erouska.cz")!) {
-                    Label("contact", systemImage: "figure.stand.line.dotted.figure.stand")
-                        .font(.caption)
-
+                Picker(selection: $viewModel.selectedChartPreview, label: EmptyView()) {
+                    ForEach(ChartPreview.allCases, id: \.self) { item in
+                        Text(item.rawValue).tag(item)
+                    }
                 }
+                .pickerStyle(.segmented)
+                .padding(.top, 4)
+                .padding(.bottom, 8)
             }
             
-        }
-        .accentColor(.blue)
-        .onAppear(perform: viewModel.fetchAllData)
-    }
-    
-    var countryHeader: some View {
-        HStack {
-            Text("Czech Republic")
-            Spacer()
-            Button(viewModel.showMore ? "less" : "more") {
-                withAnimation(.easeOut) {
-                    viewModel.showMore.toggle()
+            Section("Czech Republic") {
+                InfoRow("Infected", value: viewModel.countryData.infected)
+                InfoRow("Recovered", value: viewModel.countryData.recovered)
+                InfoRow("Hospitalized", value: viewModel.countryData.hospitalized)
+                InfoRow("Critical", value: viewModel.countryData.critical)
+                InfoRow("Deceased", value: viewModel.countryData.deceased)
+            }
+            
+            Section {
+                InfoRow("Infected", value: viewModel.infectedByRegion.value)
+                InfoRow("Recovered", value: viewModel.recoveredByRegion.value)
+                InfoRow("Deceased", value: viewModel.deceasedByRegion.value)
+            } header: {
+                Picker(selection: $viewModel.selectedRegion, label: Text(viewModel.selectedRegion.name)) {
+                    ForEach(viewModel.regionNames, id: \.self) { item in
+                        Text(item).textCase(nil).tag(viewModel.assignRegion(for: item))
+                    }
+                }
+                .pickerStyle(.menu)
+            }
+            
+            Section {
+                Link(destination: .ministry) {
+                    Label("Ministry of Health", systemImage: "link")
+                }
+                Link(destination: .erouska) {
+                    Label("Get eRouška", systemImage: "link")
                 }
             }
         }
+        .listStyle(.insetGrouped)
+        .task { await viewModel.fetchData() }
+        .refreshable { await viewModel.fetchData() }
+        .navigationTitle("COVID CZ")
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        NavigationView {
+            ContentView()
+        }
     }
 }
-
-
-
-
