@@ -18,3 +18,9 @@ extension Date: RawRepresentable {
         self = Date.formatter.date(from: rawValue) ?? Date()
     }
 }
+
+extension Date {
+    var timeAgo: String {
+        self.formatted(.relative(presentation: .named))
+    }
+}

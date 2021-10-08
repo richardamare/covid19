@@ -70,6 +70,9 @@ struct ContentView: View {
         .listStyle(.insetGrouped)
         .task { await viewModel.fetchData() }
         .refreshable { await viewModel.fetchData() }
+        .alert(viewModel.alert.title, isPresented: $viewModel.alert.isPresented) {} message: {
+            Text(viewModel.alert.message)
+        }
         .navigationTitle("COVID CZ")
     }
 }

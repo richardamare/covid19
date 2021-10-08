@@ -11,6 +11,7 @@ class ContentViewModel: ObservableObject {
     @Published var pickedRegion: String = "Hlavní město Praha"
     @Published var selectedChartPreview: ChartPreview = .week
     @Published var countryData: Country = .dummy
+    @Published var alert = (isPresented: false, title: "", message: "")
     
     @AppStorage("lastChecked") var lastChecked: Date = .now
     
@@ -18,16 +19,16 @@ class ContentViewModel: ObservableObject {
         countryData.infectedDaily.reduced(to: selectedChartPreview)
     }
     
+    var regionNames: [String] {
+        countryData.infectedByRegion.map { $0.name }
+    }
+    
     var updated: String {
-        countryData.lastUpdatedAtSource.toDate().formatted(.relative(presentation: .named))
+        countryData.lastUpdatedAtSource.toDate().timeAgo
     }
     
     var checked: String {
-        lastChecked.formatted(.relative(presentation: .named))
-    }
-    
-    func assignRegion(for string: String, in regions: [Region]) -> Region {
-        regions.first(where: { $0.name == string }) ?? .dummy
+        lastChecked.timeAgo
     }
     
     var deceasedByRegion: Region {
@@ -42,8 +43,8 @@ class ContentViewModel: ObservableObject {
         assignRegion(for: pickedRegion, in: countryData.recoveredByRegion)
     }
     
-    var regionNames: [String] {
-        countryData.infectedByRegion.map { $0.name }
+    func assignRegion(for string: String, in regions: [Region]) -> Region {
+        regions.first(where: { $0.name == string }) ?? .dummy
     }
     
     func fetchData() async {
@@ -58,6 +59,9 @@ class ContentViewModel: ObservableObject {
             }
         } catch {
             print(error.localizedDescription)
+            DispatchQueue.main.async {
+                self.alert = (true, "Error", error.localizedDescription)
+            }
         }
     }
 }
