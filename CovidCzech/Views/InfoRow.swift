@@ -11,18 +11,18 @@ struct InfoRow: View {
     var label: LocalizedStringKey
     var value: Int
     
-    init(_ label: LocalizedStringKey, value: Int) {
+    init(_ label: LocalizedStringKey, value: Int?) {
         self.label = label
-        self.value = value
+        self.value = value ?? 0
     }
     
     var body: some View {
         HStack {
             Text(label)
+                .foregroundColor(.primary)
             Spacer()
             Text("\(value)")
-                .fontWeight(.medium)
-                .foregroundColor(.gray)
+                .foregroundColor(.secondary)
         }
     }
 }

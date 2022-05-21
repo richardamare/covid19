@@ -13,13 +13,17 @@ struct LineChartView: View {
     
     var dataPoints: [LineChartDataPoint] {
         data.map { item -> LineChartDataPoint in
-            let xAxis = item.date.toDate().formatted(date: .numeric, time: .omitted).prefix(5)
-            let description = item.date.toDate().formatted(date: .complete, time: .omitted)
+            let xAxis = item.formattedDate
+                .formatted(.dateTime.day().month().year())
+                .prefix(5)
+            let description = item.formattedDate
+                .formatted(.dateTime.day().month().year())
+            
             return LineChartDataPoint(
                 value: Double(item.value),
                 xAxisLabel: String(xAxis),
                 description: description,
-                date: item.date.toDate()
+                date: item.formattedDate
             )
         }
     }
@@ -70,6 +74,6 @@ struct Chart: View {
 
 struct LineChartView_Previews: PreviewProvider {
     static var previews: some View {
-        LineChartView(data: [.init(value: 200, date: "2020-03-01T00:00:00.000Z")])
+        LineChartView(data: [.init(value: 200, date: "")])
     }
 }

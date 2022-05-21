@@ -11,6 +11,6 @@ struct Region: Decodable, Hashable {
     var name: String
     var value: Int
     
-    static let dummy = Region(name: "Hlavní město Praha", value: 0)
+    static let preview = Region(name: "Hlavní město Praha", value: 0)
 }
 

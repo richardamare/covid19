@@ -15,5 +15,9 @@ struct Country: Decodable {
     var deceasedByRegion: [Region]
     var lastUpdatedAtSource: String
     
-    static let dummy = Country(infected: 0, recovered: 0, hospitalized: 0, critical: 0, deceased: 0, testedAG: 0, testedPCR: 0, totalTested: 0, infectedDaily: [], infectedByRegion: [], recoveredByRegion: [], deceasedByRegion: [], lastUpdatedAtSource: "2021-10-08T06:41:00.000Z")
+    var lastUpdated: Date {
+        lastUpdatedAtSource.toDate() ?? .now
+    }
+    
+    static let preview = Country(infected: 0, recovered: 0, hospitalized: 0, critical: 0, deceased: 0, testedAG: 0, testedPCR: 0, totalTested: 0, infectedDaily: [], infectedByRegion: [], recoveredByRegion: [], deceasedByRegion: [], lastUpdatedAtSource: "")
 }

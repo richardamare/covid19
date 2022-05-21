@@ -8,26 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = ContentViewModel()
+    @EnvironmentObject var dataStore: DataStore
+    
+    var country: Country? { dataStore.country }
     
     var body: some View {
         List {
-            Section {
-                VStack(alignment: .leading, spacing: 2.5) {
-                    Text("Last update was \(viewModel.updated).")
-                        .fontWeight(.medium)
-                        .foregroundColor(.primary)
-                    Text("Checked \(viewModel.checked).")
-                        .font(.footnote)
-                        .foregroundColor(.gray)
-                }
-                .padding(.vertical, 8)
-            }
             
             Section {
-                LineChartView(data: viewModel.chartData)
-                
-                Picker(selection: $viewModel.selectedChartPreview, label: EmptyView()) {
+                LineChartView(data: dataStore.chartData)
+
+                Picker(selection: $dataStore.selectedPreview, label: EmptyView()) {
                     ForEach(ChartPreview.allCases, id: \.self) { item in
                         Text(item.rawValue).tag(item)
                     }
@@ -38,20 +29,20 @@ struct ContentView: View {
             }
             
             Section("Czech Republic") {
-                InfoRow("Infected", value: viewModel.countryData.infected)
-                InfoRow("Recovered", value: viewModel.countryData.recovered)
-                InfoRow("Hospitalized", value: viewModel.countryData.hospitalized)
-                InfoRow("Critical", value: viewModel.countryData.critical)
-                InfoRow("Deceased", value: viewModel.countryData.deceased)
+                InfoRow("Infected", value: country?.infected)
+                InfoRow("Recovered", value: country?.recovered)
+                InfoRow("Hospitalized", value: country?.hospitalized)
+                InfoRow("Critical", value: country?.critical)
+                InfoRow("Deceased", value: country?.deceased)
             }
-            
+
             Section {
-                InfoRow("Infected", value: viewModel.infectedByRegion.value)
-                InfoRow("Recovered", value: viewModel.recoveredByRegion.value)
-                InfoRow("Deceased", value: viewModel.deceasedByRegion.value)
+                InfoRow("Infected", value: dataStore.infectedByRegion?.value)
+                InfoRow("Recovered", value: dataStore.recoveredByRegion?.value)
+                InfoRow("Deceased", value: dataStore.deceasedByRegion?.value)
             } header: {
-                Picker(selection: $viewModel.pickedRegion, label: Text(viewModel.pickedRegion)) {
-                    ForEach(viewModel.regionNames, id: \.self) { item in
+                Picker(selection: $dataStore.selectedRegion, label: Text(dataStore.selectedRegion)) {
+                    ForEach(dataStore.regions, id: \.self) { item in
                         Text(item).textCase(nil).tag(item)
                     }
                 }
@@ -68,12 +59,16 @@ struct ContentView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .task { await viewModel.fetchData() }
-        .refreshable { await viewModel.fetchData() }
-        .alert(viewModel.alert.title, isPresented: $viewModel.alert.isPresented) {} message: {
-            Text(viewModel.alert.message)
-        }
+        .task { await dataStore.getData() }
+        .refreshable { await dataStore.getData() }
+        .alert(item: $dataStore.alertItem) { $0.alert }
         .navigationTitle("COVID CZ")
+        .toolbar {
+            ToolbarItem(placement: .bottomBar) {
+                Text("Last update: \(dataStore.country?.lastUpdated.timeAgo ?? "")")
+                    .foregroundColor(.secondary)
+            }
+        }
     }
 }
 
@@ -82,5 +77,6 @@ struct ContentView_Previews: PreviewProvider {
         NavigationView {
             ContentView()
         }
+        .environmentObject(DataStore())
     }
 }
